@@ -130,3 +130,6 @@ dmypy.json
 
 # Tensoroboard directory
 runs/
+
+# Training instances
+experiment/

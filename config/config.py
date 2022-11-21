@@ -21,6 +21,9 @@ _C.DATASET = ConfigurationNode()
 _C.DATASET.DATA_DIR = './OU_q100/'
 
 
+_C.SAVE_DIR = "./experiment/"
+
+
 def get_cfg_defaults():
     return _C.clone()
 
