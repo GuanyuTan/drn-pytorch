@@ -58,6 +58,7 @@ logging.info(f"DRN model initialized with config: \n {config}")
 mse_loss = nn.MSELoss()
 optimizer = optim.Adam(model.parameters(), lr=config.TRAINING.LEARNING_RATE)
 writer = SummaryWriter()
+writer.add_text(tag="parameter count", text_string=f"No. of Parameters:{sum(param.numel() for param in model.parameters() if param.requires_grad)}")
 for epoch in range(epochs):
     running_mse = []
     running_djsl = []
@@ -89,15 +90,13 @@ for epoch in range(epochs):
             djsl.append(Djs_loss.item())
         mse = np.mean(mse)
         djsl = np.mean(djsl)
-        logging.info(
-            f"Epoch {epoch+1}: TESTING > MSE Loss {mse}, DJSL {djsl}")
-        writer.add_scalar('Test MSE Loss', mse, epoch)
-        writer.add_scalar('Test Shanon-Jenson Divergence Loss', djsl, epoch)
+        print(f"Epoch {epoch+1}: TESTING > MSE Loss {mse}, DJSL {djsl}")
 logging.info("Training completed.")
 with open(os.path.join(cur_dir, "config.yaml"),'x') as f:
     f.write(config.dump())
     f.close()
 save_path = os.path.join(cur_dir, "model.pt")
 logging.info(f"Saving the model to {save_path}")
+print(model.state_dict())
 torch.save(model.state_dict(), save_path)
 writer.flush()
